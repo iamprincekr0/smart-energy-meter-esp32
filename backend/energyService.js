@@ -10,6 +10,7 @@ function createStore() {
 
 function toFiniteNumber(value, name) {
   const numeric = Number(value);
+  // This meter flow tracks consumption-only readings, so negative values are rejected.
   if (!Number.isFinite(numeric) || numeric < 0) {
     throw new Error(`Invalid ${name}`);
   }

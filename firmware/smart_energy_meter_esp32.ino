@@ -6,6 +6,7 @@ const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
 const char* BACKEND_URL = "http://YOUR_BACKEND_HOST:8080/api/telemetry";
 const char* METER_ID = "esp32-meter-1";
 
+// Local serial alert mirror of backend threshold for quick on-device visibility.
 const float ALERT_THRESHOLD_W = 2000.0;
 unsigned long lastSendMs = 0;
 const unsigned long SEND_INTERVAL_MS = 10000;
