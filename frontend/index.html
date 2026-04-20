@@ -31,6 +31,8 @@
   <ul id="alerts"><li class="muted">No alerts yet.</li></ul>
 
   <script>
+    const REFRESH_INTERVAL_MS = 5000;
+
     async function loadDashboard() {
       const [telemetryRes, alertsRes] = await Promise.all([
         fetch('/api/telemetry/latest'),
@@ -67,7 +69,7 @@
       loadDashboard().catch((error) => {
         console.error(error);
       });
-    }, 5000);
+    }, REFRESH_INTERVAL_MS);
     loadDashboard().catch((error) => {
       console.error(error);
       document.getElementById('alerts').innerHTML = '<li>Failed to load dashboard data.</li>';

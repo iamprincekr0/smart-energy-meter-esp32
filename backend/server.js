@@ -5,6 +5,7 @@ const { createStore, processTelemetry } = require('./energyService');
 
 const PORT = Number(process.env.PORT || 8080);
 const POWER_ALERT_THRESHOLD_W = Number(process.env.POWER_ALERT_THRESHOLD_W || 2000);
+const MAX_PAYLOAD_SIZE = 1_000_000;
 const store = createStore();
 const frontendPath = path.resolve(__dirname, '..', 'frontend', 'index.html');
 
@@ -23,7 +24,7 @@ function readJson(req) {
     let body = '';
     req.on('data', (chunk) => {
       body += chunk;
-      if (body.length > 1_000_000) {
+      if (body.length > MAX_PAYLOAD_SIZE) {
         reject(new Error('Payload too large'));
         req.destroy();
       }
