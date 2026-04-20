@@ -76,7 +76,8 @@ void loop() {
     return;
   }
 
-  float hours = SEND_INTERVAL_MS / 3600000.0;
+  unsigned long elapsedMs = lastSendMs == 0 ? SEND_INTERVAL_MS : (now - lastSendMs);
+  float hours = elapsedMs / 3600000.0;
   Reading reading = readEnergySensor();
   totalEnergyKWh += (reading.power / 1000.0) * hours;
 
