@@ -25,8 +25,8 @@ function readJson(req) {
     req.on('data', (chunk) => {
       body += chunk;
       if (body.length > MAX_PAYLOAD_SIZE) {
-        reject(new Error('Payload too large'));
         req.destroy();
+        reject(new Error('Payload too large'));
       }
     });
     req.on('end', () => {

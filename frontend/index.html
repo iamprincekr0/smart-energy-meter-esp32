@@ -43,11 +43,15 @@
 
       const telemetry = telemetryData.telemetry;
       if (telemetry) {
+        const voltage = Number(telemetry.voltage);
+        const current = Number(telemetry.current);
+        const power = Number(telemetry.power);
+        const energyKWh = Number(telemetry.energyKWh);
         document.getElementById('meterId').textContent = telemetry.meterId;
-        document.getElementById('voltage').textContent = telemetry.voltage.toFixed(2);
-        document.getElementById('current').textContent = telemetry.current.toFixed(2);
-        document.getElementById('power').textContent = telemetry.power.toFixed(2);
-        document.getElementById('energy').textContent = telemetry.energyKWh.toFixed(4);
+        document.getElementById('voltage').textContent = Number.isFinite(voltage) ? voltage.toFixed(2) : '-';
+        document.getElementById('current').textContent = Number.isFinite(current) ? current.toFixed(2) : '-';
+        document.getElementById('power').textContent = Number.isFinite(power) ? power.toFixed(2) : '-';
+        document.getElementById('energy').textContent = Number.isFinite(energyKWh) ? energyKWh.toFixed(4) : '-';
         document.getElementById('timestamp').textContent = telemetry.timestamp;
       }
 
