@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Energy Meter Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f5f7fb; color: #1f2937; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 12px; margin-bottom: 20px; }
+    .card { background: #fff; border-radius: 8px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    h1 { margin-top: 0; }
+    ul { list-style: none; padding: 0; }
+    li { background: #fff3cd; border: 1px solid #ffe69c; margin-bottom: 8px; border-radius: 6px; padding: 10px; }
+    .muted { color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Smart Energy Meter Dashboard</h1>
+  <p class="muted">Live meter telemetry and high-usage alerts from ESP32 uploads.</p>
+
+  <div class="grid">
+    <div class="card"><strong>Meter ID</strong><div id="meterId">-</div></div>
+    <div class="card"><strong>Voltage (V)</strong><div id="voltage">-</div></div>
+    <div class="card"><strong>Current (A)</strong><div id="current">-</div></div>
+    <div class="card"><strong>Power (W)</strong><div id="power">-</div></div>
+    <div class="card"><strong>Energy (kWh)</strong><div id="energy">-</div></div>
+    <div class="card"><strong>Timestamp</strong><div id="timestamp">-</div></div>
+  </div>
+
+  <h2>Alerts</h2>
+  <ul id="alerts"><li class="muted">No alerts yet.</li></ul>
+
+  <script>
+    async function loadDashboard() {
+      const [telemetryRes, alertsRes] = await Promise.all([
+        fetch('/api/telemetry/latest'),
+        fetch('/api/alerts')
+      ]);
+      const telemetryData = await telemetryRes.json();
+      const alertsData = await alertsRes.json();
+
+      const telemetry = telemetryData.telemetry;
+      if (telemetry) {
+        document.getElementById('meterId').textContent = telemetry.meterId;
+        document.getElementById('voltage').textContent = telemetry.voltage.toFixed(2);
+        document.getElementById('current').textContent = telemetry.current.toFixed(2);
+        document.getElementById('power').textContent = telemetry.power.toFixed(2);
+        document.getElementById('energy').textContent = telemetry.energyKWh.toFixed(4);
+        document.getElementById('timestamp').textContent = telemetry.timestamp;
+      }
+
+      const alertList = document.getElementById('alerts');
+      alertList.innerHTML = '';
+      if (!alertsData.alerts || alertsData.alerts.length === 0) {
+        alertList.innerHTML = '<li class="muted">No alerts yet.</li>';
+        return;
+      }
+
+      for (const alert of alertsData.alerts) {
+        const li = document.createElement('li');
+        li.textContent = `${alert.timestamp} | ${alert.message} (threshold ${alert.thresholdW}W)`;
+        alertList.appendChild(li);
+      }
+    }
+
+    setInterval(loadDashboard, 5000);
+    loadDashboard().catch((error) => {
+      console.error(error);
+      document.getElementById('alerts').innerHTML = '<li>Failed to load dashboard data.</li>';
+    });
+  </script>
+</body>
+</html>
