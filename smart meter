@@ -1,11 +1,39 @@
 #include <WiFi.h>
 
+// Dummy sensor pins
+int voltagePin = 34;
+int currentPin = 35;
+
+float voltage = 0;
+float current = 0;
+float power = 0;
+
 void setup() {
   Serial.begin(115200);
   Serial.println("Smart Energy Meter Started");
 }
 
 void loop() {
-  Serial.println("Reading energy data...");
+  // Read analog values
+  voltage = analogRead(voltagePin) * (3.3 / 4095.0) * 100;
+  current = analogRead(currentPin) * (3.3 / 4095.0) * 10;
+
+  // Calculate power
+  power = voltage * current;
+
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.println(" V");
+
+  Serial.print("Current: ");
+  Serial.print(current);
+  Serial.println(" A");
+
+  Serial.print("Power: ");
+  Serial.print(power);
+  Serial.println(" W");
+
+  Serial.println("-------------------");
+
   delay(2000);
 }
