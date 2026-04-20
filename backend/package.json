@@ -1,0 +1,18 @@
+{
+  "name": "smart-energy-backend",
+  "version": "1.0.0",
+  "description": "Backend API for ESP32 smart energy meter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "esp32",
+    "iot",
+    "energy-meter"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
