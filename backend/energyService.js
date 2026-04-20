@@ -3,7 +3,8 @@ const MAX_ALERTS = 100;
 function createStore() {
   return {
     latestTelemetry: null,
-    alerts: []
+    alerts: [],
+    nextAlertId: 0
   };
 }
 
@@ -34,8 +35,9 @@ function processTelemetry(store, payload, thresholdW = 2000) {
 
   let alert = null;
   if (telemetry.power > thresholdW) {
+    const nextId = ++store.nextAlertId;
     alert = {
-      id: `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+      id: `${Date.now()}-${nextId}`,
       meterId,
       timestamp: telemetry.timestamp,
       powerW: telemetry.power,

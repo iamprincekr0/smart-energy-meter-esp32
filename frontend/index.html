@@ -63,7 +63,11 @@
       }
     }
 
-    setInterval(loadDashboard, 5000);
+    setInterval(() => {
+      loadDashboard().catch((error) => {
+        console.error(error);
+      });
+    }, 5000);
     loadDashboard().catch((error) => {
       console.error(error);
       document.getElementById('alerts').innerHTML = '<li>Failed to load dashboard data.</li>';
